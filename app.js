@@ -1,4 +1,4 @@
-const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzBLXnbe832dMh3_E5mKkOIILcDh0esBsuLlpft4Coy9CwBdak7NmCt9Mu8GXySnpCw/exec";
+            const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzBLXnbe832dMh3_E5mKkOIILcDh0esBsuLlpft4Coy9CwBdak7NmCt9Mu8GXySnpCw/exec";
 
 function saveApiKey() {
     const key = document.getElementById('api-key').value.trim();
@@ -68,30 +68,27 @@ async function generateExam() {
         for (let i = 0; i < checkboxes.length; i++) {
             const passage = checkboxes[i].value;
             
-            // AI에게 역할을 '시험지 출력 기계'로 고정하는 프롬프트
+            // 프롬프트를 유형과 개수를 강제하도록 수정
             const prompt = `
-            당신은 감정이 없는 '수능 영어 시험지 출력 기계'입니다.
-            지시사항:
-            1. 아래 지문을 사용하여 수능 유형 문제 ${questionCount}문항을 만드세요.
-            2. 반드시 아래 [형식]만 출력하세요. 인삿말, 맺음말, 잡담은 금지입니다.
+            당신은 수능 영어 출제 위원입니다. 아래 지문을 읽고 '${selectedType}' 유형의 문제를 정확히 ${questionCount}문항 출제하세요.
+            
+            [지시사항]
+            1. 유형: ${selectedType}
+            2. 개수: 정확히 ${questionCount}문항
+            3. 잡담 금지. 인사 금지. 오직 아래 형식으로만 출력.
             
             [형식]
             [지문]
             (지문 내용)
             
             [문제]
-            (문제 문항)
-            ① 
-            ② 
-            ③ 
-            ④ 
-            ⑤ 
+            (문제 문항 1~${questionCount}번까지)
             
             [정답 및 해설]
-            정답: (번호)
-            해설: (간단한 해설)
+            정답: 
+            해설: 
             
-            [지문 내용]
+            [지문]
             ${passage}
             `;
 
