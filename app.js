@@ -1,21 +1,8 @@
 const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzBLXnbe832dMh3_E5mKkOIILcDh0esBsuLlpft4Coy9CwBdak7NmCt9Mu8GXySnpCw/exec";
 
-// ... saveApiKey, savePassageToDB, loadPassages 함수는 기존과 동일 ...
 function saveApiKey() {
     const key = document.getElementById('api-key').value.trim();
     if (key) { localStorage.setItem('gemini_api_key', key); alert("API 키가 저장되었습니다."); document.getElementById('key-status').innerText = "✅ 저장됨"; }
-}
-
-async function savePassageToDB() {
-    const title = document.getElementById('passage-title').value.trim();
-    const content = document.getElementById('new-passage').value.trim();
-    if (!title || !content) return alert("제목과 지문을 모두 입력하세요.");
-    document.getElementById('save-status').innerText = "저장 중...";
-    try {
-        await fetch(APPS_SCRIPT_WEB_APP_URL, { method: 'POST', body: JSON.stringify({ title: title, content: content }) });
-        document.getElementById('save-status').innerText = "✅ 저장 완료!";
-        loadPassages();
-    } catch(e) { document.getElementById('save-status').innerText = "❌ 저장 실패"; }
 }
 
 async function loadPassages() {
@@ -26,14 +13,77 @@ async function loadPassages() {
         const data = await response.json();
         listDiv.innerHTML = "";
         data.forEach((item, index) => {
-            const displayTitle = item.title ? item.title : "제목없음";
             listDiv.innerHTML += `
             <div class="passage-item">
                 <input type="checkbox" id="p-${index}" value="${item.content}"> 
-                <label for="p-${index}"><strong>[${displayTitle}]</strong></label>
+                <label for="p-${index}"><strong>[${item.title || "제목없음"}]</strong></label>
             </div>`;
         });
     } catch (e) { listDiv.innerHTML = "데이터 로드 실패"; }
+}
+
+async function generateExam() {
+    const apiKey = localStorage.getItem('gemini_api_key');
+    if (!apiKey) return alert("API 키를 먼저 저장하세요.");
+    
+    const checkboxes = document.querySelectorAll('#passage-list input[type="checkbox"]:checked');
+    if (checkboxes.length === 0) return alert("지문을 선택하세요.");
+    
+    const selectedType = document.getElementById('question-type').value;
+    const outputContent = document.getElementById('output-content');
+    
+    document.getElementById('loading-msg').style.display = "block";
+    outputContent.innerHTML = "";
+    let finalExamText = "";
+
+    try {
+        for (let i = 0; i < checkboxes.length; i++) {
+            const passage = checkboxes[i].value;
+            
+            // 핵심 수정: 프롬프트에서 '시험지 형식'과 '문제 유형별 변형'을 강제함
+            const prompt = `
+            당신은 수능 영어 출제 위원입니다. 아래 지문을 사용하여 '${selectedType}' 유형의 문제를 출제하세요.
+            
+            [지시사항]
+            1. [지문] 영역: 
+               - 빈칸 추론 유형이라면 정답이 들어갈 부분을 '____'로 처리하여 출력하세요. (지문 전체를 제시하되 그 지문 전체에서 문제로 낼 빈칸 부분만 ____으로 처리해서 제시하세요.)
+               - 순서 배열 유형이라면 (A), (B), (C)로 나누어 순서를 섞으세요.
+               - 나머지 유형도 수능 시험지처럼 편집해서 출력하세요.
+            2. [문제] 영역: 5지선다 문항 작성.
+            3. [정답 및 해설] 영역: 정답과 간단한 해설 작성.
+            4. 잡담, 인사, "다음은 지문입니다" 같은 문구 절대 금지.
+            
+            [지문 원본]
+            ${passage}
+            `;
+
+            const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                method: 'POST', 
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`,
+                    'HTTP-Referer': 'https://khh090630-lang.github.io/engquizapp/',
+                    'X-Title': 'English Quiz App'
+                },
+                body: JSON.stringify({ 
+                    model: "openai/gpt-4o-mini",
+                    messages: [{ role: "user", content: prompt }] 
+                })
+            });
+            const data = await res.json();
+            
+            if (data.choices && data.choices[0].message) {
+                const text = data.choices[0].message.content;
+                finalExamText += text.replace(/\n/g, '<br>') + '<br><br><hr><br>';
+            }
+        }
+        outputContent.innerHTML = finalExamText;
+    } catch (e) {
+        outputContent.innerHTML = "네트워크 오류 발생!";
+    } finally {
+        document.getElementById('loading-msg').style.display = "none";
+    }
+}
 }
 
 async function generateExam() {
