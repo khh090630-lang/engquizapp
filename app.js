@@ -1,5 +1,5 @@
 // 여기에 복사해둔 구글 웹 앱 URL을 넣습니다.
-const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwCZqJwGSAickAPwrcUBsMNuaBMrfnEwIcF4xzSAbN_9SE5PGF_4_14X0qK-3vL6P43/exec";
+const APPS_SCRIPT_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzBLXnbe832dMh3_E5mKkOIILcDh0esBsuLlpft4Coy9CwBdak7NmCt9Mu8GXySnpCw/exec";
 
 function saveApiKey() {
     const key = document.getElementById('api-key').value.trim();
