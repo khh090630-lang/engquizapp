@@ -60,28 +60,95 @@ async function generateExam() {
             지문: "${passage}"
             
             요구사항:
-            1. 유형: ${selectedType}
-            2. 문제 형식: 반드시 아래 [형식]을 엄격히 준수할 것.
-            
-            [형식]
+            1. 출제할 유형: ${selectedType}
+            2. 문제 형식: 반드시 아래 제공된 예시 중 '${selectedType}'에 해당하는 형식을 완벽하게 모방하여 1문제를 출력할 것.
+
+            [예시 형식]: 빈칸 추론일 경우
             [지문]
-            ${passage}
+            Humans excel at visual imagery. Our brains evolved this ability to create an internal mental picture of the world in which we can rehearse forthcoming actions. However, evolution has seen to it that such internally generated representations are never as authentic as the real thing. If your internal model of the world were a perfect substitute, then anytime you felt hungry you could simply imagine yourself at ____. You would have no incentive to find real food and would soon starve to death.
+
+            [문제]
+            위 글의 빈칸에 들어갈 말로 가장 적절한 것은?
+            ① a restaurant enjoying a meal
+            ② a banquet, consuming a feast
+            ③ home cooking a delicious dinner
+            ④ a picnic with friends
+            ⑤ a farm harvesting fresh crops
+
+            [정답 및 해설]
+            정답: ②
+            해설: 상상만으로 배고픔을 달랠 수 없다는 예시가 와야 하므로 '연회에서 만찬을 즐기는 상황'이 적절함.
+
+            [예시 형식]: 순서 배열일 경우
+            [지문]
+            (A) But evolution has seen to it that such internally generated representations are never as authentic as the real thing. This is a wise bit of self restraint on your genes’ part.
+
+            (B) Humans excel at visual imagery. Our brains evolved this ability to create an internal mental picture or model of the world in which we can rehearse forthcoming actions, without the risks of the real world.
+
+            (C) If your internal model were a perfect substitute, you would starve to death because you would have no incentive to find real food.
+
+            [문제]
+            주어진 글 다음에 이어질 글의 순서로 가장 적절한 것은?
+            ① (A)-(C)-(B) ② (B)-(A)-(C) ③ (B)-(C)-(A) ④ (C)-(A)-(B) ⑤ (C)-(B)-(A)
+
+            [정답 및 해설]
+            정답: ②
+            해설: 인간의 능력(B) -> 하지만 한계가 있음(A) -> 구체적 예시(C) 순서가 자연스러움.
+
+            [예시 형식]: 주제/제목 찾기일 경우
+            [지문]
+            Humans excel at visual imagery. Our brains evolved this ability to create an internal mental picture or model of the world in which we can rehearse forthcoming actions, without the risks or the penalties of doing them in the real world. [...] As the Bard said, “You cannot cloy the hungry edge of appetite by bare imagination of a feast.”
+
+            [문제]
+            다음 글의 제목으로 가장 적절한 것은?
+            ① The Evolution of Human Imagination and Its Limit
+            ② Visual Imagery: The Ultimate Substitute for Reality
+            ③ Why Brain Imaging is Essential for Psychology
+            ④ How to Satisfy Hunger Through Mental Simulation
+            ⑤ The Differences Between Real Food and Imagined Feasts
+
+            [정답 및 해설]
+            정답: ①
+            해설: 인간의 시각적 이미지 능력의 진화적 이점과 동시에, 현실을 완전히 대체할 수는 없다는 한계를 종합적으로 다루고 있음. ②번은 '완벽한 대체재'라고 하여 지문의 내용과 반대되므로 오답.
+
+            [예시 형식]: 문장 삽입일 경우
+            [지문]
+            Humans excel at visual imagery. Our brains evolved this ability to create an internal mental picture or model of the world in which we can rehearse forthcoming actions, without the risks or the penalties of doing them in the real world. [1] There are even hints from brain imaging studies by Harvard University psychologist Steve Kosslyn showing that your brain uses the same regions to imagine a scene as when you actually view one. [2] But evolution has seen to it that such internally generated representations are never as authentic as the real thing. [3] If your internal model of the world were a perfect substitute, then anytime you felt hungry you could simply imagine yourself at a banquet, consuming a feast. [4] You would have no incentive to find real food and would soon starve to death.
+
+            [삽입할 문장]
+            This is a wise bit of self restraint on your genes’ part.
+
+            [문제]
+            글의 흐름으로 보아, 주어진 문장이 들어가기에 가장 적절한 곳은?
+            ① [1]  ② [2]  ③ [3]  ④ [4]  ⑤ [5]
+
+            [정답 및 해설]
+            정답: ③
+            해설: 내부 모델이 현실만큼 진실하지 않다는 진술 뒤에, 왜 그런 제한이 유전적 차원에서 현명한 일인지 설명하는 문장이 와야 함.
+
+            [예시 형식]: 요약문 완성일 경우
+            [지문]
+            Humans excel at visual imagery. Our brains evolved this ability to create an internal mental picture or model of the world in which we can rehearse forthcoming actions, without the risks or the penalties of doing them in the real world. There are even hints from brain imaging studies by Harvard University psychologist Steve Kosslyn showing that your brain uses the same regions to imagine a scene as when you actually view one. But evolution has seen to it that such internally generated representations are never as authentic as the real thing. This is a wise bit of self-restraint on your genes’ part. If your internal model of the world were a perfect substitute, then anytime you felt hungry you could simply imagine yourself at a banquet, consuming a feast. You would have no incentive to find real food and would soon starve to death.  
             
             [문제]
-            (여기에 ${selectedType} 유형에 맞는 수능형 5지선다 문제를 작성하라)
-            ① 
-            ② 
-            ③ 
-            ④ 
-            ⑤ 
+            다음 글의 내용을 한 문장으로 요약하고자 한다. 빈칸 (A), (B)에 들어갈 말로 가장 적절한 것은? 
+            Although humans have evolved the ability to (A)______ their future actions through internal mental simulations, such models cannot (B)______ the necessity of actual physical experiences for survival. 
             
+            ① (A) rehearse - (B) substitute
+            ② (A) interpret - (B) reinforce
+            ③ (A) neglect - (B) distinguish
+            ④ (A) evaluate - (B) improve
+            ⑤ (A) observe - (B) complicate
+
             [정답 및 해설]
-            정답: 
-            해설: 
+            정답: ①
+            해설: (A): 지문에서 "rehearse forthcoming actions"라고 언급했으므로 'rehearse'가 적절함. (B): 내부 모델이 실제 현실을 완벽하게 대체할 수 없다고 했으므로 'substitute'가 적절함.
+
+            ---
             
             주의: 잡담, 인사, "문제입니다"와 같은 문구 절대 금지. 
             만약 '순서 배열' 유형이라면 지문을 (A), (B), (C)로 나누어 제시하고 선지는 (A)-(C)-(B) 이런식으로 순서를 맞추도록 내줄 것. 
-            만약 '빈칸 추론' 유형이라면 지문에 빈칸(____)을 뚫고 그 빈칸에 들어갈 내용을 정답으로 선지에서 제시하고 나머지 네 개의 선지는 헷갈릴만한 빈칸에 들어가기에 문맥상 어색한 문장을 제시할 것.
+            만약 '빈칸 추론' 유형이라면 전체지문에 빈칸(____)을 뚫고 그 빈칸에 들어갈 내용을 정답으로 선지에서 제시하고 나머지 네 개의 선지는 헷갈릴만한 빈칸에 들어가기에 문맥상 어색한 문장을 제시할 것.
             `;
 
             const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
