@@ -69,6 +69,7 @@ async function generateExam() {
             const passage = checkboxes[i].value;
             const prompt = `고등학교 영어 교사로서 다음 지문을 바탕으로 [${selectedType}] 문제 ${questionCount}문항을 출제해. 조건: 한국어 발문, 1~5번 선지, 하단 정답 및 해설 표기. 지문: ${passage}`;
 
+            // OpenRouter API 호출
             const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
                 method: 'POST', 
                 headers: { 
@@ -78,20 +79,24 @@ async function generateExam() {
                     'X-Title': 'English Quiz App'
                 },
                 body: JSON.stringify({ 
-                    model: "google/gemini-flash-1.5-exp",
+                    model: "google/gemini-flash-1.5", // 여기서 에러가 해결됩니다!
                     messages: [{ role: "user", content: prompt }] 
                 })
             });
             const data = await res.json();
+            
             if (data.choices && data.choices[0].message) {
-                finalExamText += `<h3>[Passage ${i + 1}]</h3>\n` + data.choices[0].message.content + `\n<hr>\n`;
+                const generatedText = data.choices[0].message.content;
+                finalExamText += `<h3>[Passage ${i + 1}]</h3>\n` + generatedText + `\n<hr>\n`;
             } else {
+                console.error("OpenRouter Error:", data);
                 finalExamText += `<p style='color:red;'><strong>오류:</strong> ${data.error ? data.error.message : '알 수 없는 오류'}</p>\n<hr>\n`;
             }
         }
         outputContent.innerHTML = finalExamText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
     } catch (e) {
-        outputContent.innerHTML = "네트워크 오류 발생!";
+        outputContent.innerHTML = "네트워크 오류 발생! 다시 시도해주세요.";
+        console.error("Fetch Error:", e);
     } finally {
         document.getElementById('loading-msg').style.display = "none";
     }
